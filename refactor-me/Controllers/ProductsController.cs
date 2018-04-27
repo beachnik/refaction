@@ -2,32 +2,42 @@
 using System.Net;
 using System.Web.Http;
 using refactor_me.Models;
+using refactor_me.BusinessLayer;
+using System.Collections.Generic;
 
 namespace refactor_me.Controllers
 {
     [RoutePrefix("products")]
     public class ProductsController : ApiController
     {
+        private ProductBusinessLayer busLayer;
+
+        public ProductsController()
+        {
+            busLayer = new ProductBusinessLayer();
+        }
+
+        #region Products
         [Route]
         [HttpGet]
-        public Products GetAll()
+        public List<Product> GetAll()
         {
-            return new Products();
+            return busLayer.GetAll();
         }
 
         [Route]
         [HttpGet]
-        public Products SearchByName(string name)
+        public List<Product> SearchByName(string name)
         {
-            return new Products(name);
+            return busLayer.GetByName(name);
         }
 
         [Route("{id}")]
         [HttpGet]
         public Product GetProduct(Guid id)
         {
-            var product = new Product(id);
-            if (product.IsNew)
+            var product = busLayer.GetByID(id);
+            if (product == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
             return product;
@@ -37,33 +47,41 @@ namespace refactor_me.Controllers
         [HttpPost]
         public void Create(Product product)
         {
-            product.Save();
+            if (!busLayer.SaveNewProduct(product))
+            {
+                //If the GUID has already been used in the DB we return null 
+                //and throw a conflict response header.  Not sure if this
+                //is quite the correct response but I felt something was required
+                throw new HttpResponseException(HttpStatusCode.Conflict);
+            }
         }
 
         [Route("{id}")]
         [HttpPut]
         public void Update(Guid id, Product product)
         {
-            var orig = new Product(id)
-            {
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                DeliveryPrice = product.DeliveryPrice
-            };
+            //Something weird must have happened if the Id for the object and the
+            //passed Id don't match.  Throw an error.
+            if (product.Id != id)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            if (!orig.IsNew)
-                orig.Save();
+            //If we couldn't update the product it's almost certainly because
+            //we couldn't find it.
+            if (!busLayer.UpdateProduct(product))
+                throw new HttpResponseException(HttpStatusCode.NotFound);
         }
 
         [Route("{id}")]
         [HttpDelete]
         public void Delete(Guid id)
         {
-            var product = new Product(id);
-            product.Delete();
+            busLayer.DeleteProduct(id);
         }
 
+        #endregion
+
+
+        #region ProductOptions
         [Route("{productId}/options")]
         [HttpGet]
         public ProductOptions GetOptions(Guid productId)
@@ -111,5 +129,6 @@ namespace refactor_me.Controllers
             var opt = new ProductOption(id);
             opt.Delete();
         }
+        #endregion
     }
 }
