@@ -22,21 +22,21 @@ namespace refactor_me.Controllers
         [HttpGet]
         public List<Product> GetAll()
         {
-            return busLayer.GetAll();
+            return busLayer.GetAllProducts();
         }
 
         [Route]
         [HttpGet]
         public List<Product> SearchByName(string name)
         {
-            return busLayer.GetByName(name);
+            return busLayer.GetProductByName(name);
         }
 
         [Route("{id}")]
         [HttpGet]
         public Product GetProduct(Guid id)
         {
-            var product = busLayer.GetByID(id);
+            var product = busLayer.GetProductByID(id);
             if (product == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
@@ -75,7 +75,8 @@ namespace refactor_me.Controllers
         [HttpDelete]
         public void Delete(Guid id)
         {
-            busLayer.DeleteProduct(id);
+            if (!busLayer.DeleteProduct(id))
+                throw new HttpResponseException(HttpStatusCode.NotFound);
         }
 
         #endregion
@@ -84,19 +85,18 @@ namespace refactor_me.Controllers
         #region ProductOptions
         [Route("{productId}/options")]
         [HttpGet]
-        public ProductOptions GetOptions(Guid productId)
+        public List<ProductOption> GetOptions(Guid productId)
         {
-            return new ProductOptions(productId);
+            return busLayer.GetOptionsForProduct(productId);
         }
 
         [Route("{productId}/options/{id}")]
         [HttpGet]
         public ProductOption GetOption(Guid productId, Guid id)
         {
-            var option = new ProductOption(id);
-            if (option.IsNew)
+            var option = busLayer.GetOptionById(id);
+            if (option == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
-
             return option;
         }
 
@@ -104,30 +104,24 @@ namespace refactor_me.Controllers
         [HttpPost]
         public void CreateOption(Guid productId, ProductOption option)
         {
+            //Not sure how essential this is, but leaving it will do no harm.
             option.ProductId = productId;
-            option.Save();
+            busLayer.SaveNewProductOption(option);
         }
 
         [Route("{productId}/options/{id}")]
         [HttpPut]
         public void UpdateOption(Guid id, ProductOption option)
         {
-            var orig = new ProductOption(id)
-            {
-                Name = option.Name,
-                Description = option.Description
-            };
-
-            if (!orig.IsNew)
-                orig.Save();
+            busLayer.UpdateProductOption(option);
         }
 
         [Route("{productId}/options/{id}")]
         [HttpDelete]
         public void DeleteOption(Guid id)
         {
-            var opt = new ProductOption(id);
-            opt.Delete();
+            if (!busLayer.DeleteProductOption(id))
+                throw new HttpResponseException(HttpStatusCode.NotFound);
         }
         #endregion
     }

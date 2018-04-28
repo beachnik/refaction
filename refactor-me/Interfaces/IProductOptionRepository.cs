@@ -9,7 +9,7 @@ namespace refactor_me.Interfaces
 {
     public interface IProductOptionRepository : IRepository<ProductOption>
     {
-        ProductOption GetByProductID(Guid productId);
+        List<ProductOption> GetByProductID(Guid productId);
         
     }
 }

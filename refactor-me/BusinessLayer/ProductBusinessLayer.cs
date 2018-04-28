@@ -19,24 +19,26 @@ namespace refactor_me.BusinessLayer
             productOptionRepo = new ProductOptionRepository();
         }
 
-        public List<Product> GetAll()
+        #region Products
+
+        public List<Product> GetAllProducts()
         {
             return productRepo.GetAll();
         }
 
-        public Product GetByID(Guid id)
+        public Product GetProductByID(Guid id)
         {
             return productRepo.GetByID(id);
         }
 
-        public List<Product> GetByName(string name)
+        public List<Product> GetProductByName(string name)
         {
             return productRepo.GetByName(name);
         }
 
         public bool SaveNewProduct(Product p)
         {
-            if (GetByID(p.Id) == null)
+            if (GetProductByID(p.Id) == null)
             {
                 productRepo.Insert(p);
                 return true;
@@ -46,7 +48,7 @@ namespace refactor_me.BusinessLayer
 
         public bool UpdateProduct(Product p)
         {
-            if (GetByID(p.Id) != null)
+            if (GetProductByID(p.Id) != null)
             {
                 productRepo.Update(p);
                 return true;
@@ -56,7 +58,7 @@ namespace refactor_me.BusinessLayer
 
         public bool DeleteProduct(Guid id)
         {
-            Product toBeDeleted = GetByID(id);
+            Product toBeDeleted = GetProductByID(id);
             if (toBeDeleted != null)
             {
                 productRepo.Delete(toBeDeleted);
@@ -64,5 +66,52 @@ namespace refactor_me.BusinessLayer
             }
             return false;
         }
+
+        #endregion
+
+        #region ProductOptions
+
+        public List<ProductOption> GetOptionsForProduct(Guid id)
+        {
+            return productOptionRepo.GetByProductID(id);
+        }
+
+        public ProductOption GetOptionById(Guid id)
+        {
+            return productOptionRepo.GetByID(id);
+        }
+
+        public bool SaveNewProductOption(ProductOption option)
+        {
+            if (GetOptionById(option.Id) == null)
+            {
+                productOptionRepo.Insert(option);
+                return true;
+            }
+            return false;
+        }
+
+        public bool UpdateProductOption(ProductOption option)
+        {
+            if (GetOptionById(option.Id) != null)
+            {
+                productOptionRepo.Update(option);
+                return true;
+            }
+            return false;
+        }
+
+        public bool DeleteProductOption(Guid optionId)
+        {
+            var toBeDeleted = GetOptionById(optionId);
+            if (toBeDeleted != null)
+            {
+                productOptionRepo.Delete(toBeDeleted);
+                return true;
+            }
+            return false;
+        }
+
+        #endregion
     }
 }
