@@ -5,6 +5,7 @@ using System.Web;
 using refactor_me.Repositories;
 using refactor_me.Interfaces;
 using refactor_me.Models;
+using Unity;
 
 namespace refactor_me.BusinessLayer
 {
@@ -15,8 +16,8 @@ namespace refactor_me.BusinessLayer
 
         public ProductBusinessLayer()
         {
-            productRepo = new ProductRepository();
-            productOptionRepo = new ProductOptionRepository();
+            productRepo = UnityConfig.Container.Resolve<IProductRepository>();
+            productOptionRepo = UnityConfig.Container.Resolve<IProductOptionRepository>();
         }
 
         #region Products
