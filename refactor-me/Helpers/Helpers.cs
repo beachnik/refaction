@@ -9,7 +9,15 @@ namespace refactor_me.Models
 
         public static SqlConnection NewConnection()
         {
-            var connstr = ConnectionString.Replace("{DataDirectory}", HttpContext.Current.Server.MapPath("~/App_Data"));
+            string connstr = "";
+            //A bit of a dirty hack to let me set up some unit testing
+            if (HttpContext.Current != null)
+            {
+                connstr = ConnectionString.Replace("{DataDirectory}", HttpContext.Current.Server.MapPath("~/App_Data"));   
+            } else
+            {
+                connstr = ConnectionString.Replace("{DataDirectory}", @"C:\Users\beach\Source\Repos\refaction\refactor-unittests\App_Data");
+            }
             return new SqlConnection(connstr);
         }
     }

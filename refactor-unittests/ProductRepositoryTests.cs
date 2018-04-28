@@ -15,7 +15,8 @@ namespace refactor_unittests
 
             Product test = repo.GetByID(Guid.Parse("8f2e9176-35ee-4f0a-ae55-83023d2db1a3"));
 
-            Console.Write(test.Description);
+            Assert.AreEqual("Newest mobile product from Samsung.", test.Description);
+            
         }
     }
 }
