@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using refactor_me.Repositories;
-using refactor_me.Interfaces;
+﻿using refactor_me.Interfaces;
 using refactor_me.Models;
+using System;
+using System.Collections.Generic;
 using Unity;
 
 namespace refactor_me.BusinessLayer
 {
-    public class ProductBusinessLayer
+    public class ProductBusinessLayer : IProductBusinessLayer
     {
         private IProductRepository productRepo;
         private IProductOptionRepository productOptionRepo;

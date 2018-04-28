@@ -1,20 +1,21 @@
-﻿using System;
+﻿using refactor_me.Interfaces;
+using refactor_me.Models;
+using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
-using refactor_me.Models;
-using refactor_me.BusinessLayer;
-using System.Collections.Generic;
+using Unity;
 
 namespace refactor_me.Controllers
 {
     [RoutePrefix("products")]
     public class ProductsController : ApiController
     {
-        private ProductBusinessLayer busLayer;
+        private IProductBusinessLayer busLayer;
 
         public ProductsController()
         {
-            busLayer = new ProductBusinessLayer();
+            busLayer = UnityConfig.Container.Resolve<IProductBusinessLayer>();
         }
 
         #region Products

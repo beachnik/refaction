@@ -1,7 +1,7 @@
+using refactor_me.BusinessLayer;
 using refactor_me.Interfaces;
 using refactor_me.Repositories;
 using System;
-
 using Unity;
 
 namespace refactor_me
@@ -45,6 +45,7 @@ namespace refactor_me
             // TODO: Register your type's mappings here.
             container.RegisterType<IProductRepository, ProductRepository>();
             container.RegisterType<IProductOptionRepository, ProductOptionRepository>();
+            container.RegisterType<IProductBusinessLayer, ProductBusinessLayer>();
         }
     }
 }

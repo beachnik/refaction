@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using refactor_me.Interfaces;
+﻿using refactor_me.Interfaces;
 using refactor_me.Models;
+using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 
 namespace refactor_me.Repositories

@@ -142,10 +142,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IProductBusinessLayer.cs" />
     <Compile Include="Interfaces\IProductOptionRepository.cs" />
     <Compile Include="Interfaces\IProductRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
-    <Compile Include="Models\Helpers.cs" />
+    <Compile Include="Helpers\Helpers.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductOption.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
