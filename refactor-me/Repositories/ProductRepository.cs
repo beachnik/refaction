@@ -41,7 +41,7 @@ namespace refactor_me.Repositories
         public List<Product> GetByName(string name)
         {
             List<Product> products = new List<Product>();
-            var rdr = ExecuteReaderQuery($"select id from product where lower(name) like '%{name.ToLower()}%'");
+            var rdr = ExecuteReaderQuery($"select * from product where lower(name) like '%{name.ToLower()}%'");
             while (rdr.Read())
             {
                 products.Add(CreateProductFromReader(rdr));

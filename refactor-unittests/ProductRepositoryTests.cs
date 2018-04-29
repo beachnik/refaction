@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using refactor_me.Repositories;
 using refactor_me.Models;
+using System.Collections.Generic;
 
 namespace refactor_unittests
 {
@@ -17,6 +18,28 @@ namespace refactor_unittests
 
             Assert.AreEqual("Newest mobile product from Samsung.", test.Description);
             
+        }
+
+        [TestMethod]
+        public void GetMissingEntryByIDTest()
+        {
+            ProductRepository repo = new ProductRepository();
+
+            Product test = repo.GetByID(Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"));
+
+            Assert.IsNull(test);
+        }
+
+        [TestMethod]
+        public void GetByNameTest()
+        {
+            ProductRepository repo = new ProductRepository();
+
+            List<Product> results = repo.GetByName("Samsung");
+
+            Assert.IsTrue(results.Count == 1);
+
+            Assert.AreEqual("Newest mobile product from Samsung.", results[0].Description);
         }
     }
 }
