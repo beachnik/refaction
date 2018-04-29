@@ -59,6 +59,11 @@ namespace refactor_me.BusinessLayer
             Product toBeDeleted = GetProductByID(id);
             if (toBeDeleted != null)
             {
+                List<ProductOption> optionsToBeDeleted = GetOptionsForProduct(id);
+
+                foreach (ProductOption po in optionsToBeDeleted)
+                    DeleteProductOption(po.Id);
+                
                 productRepo.Delete(toBeDeleted);
                 return true;
             }
