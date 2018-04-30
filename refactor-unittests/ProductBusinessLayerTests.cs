@@ -26,7 +26,10 @@ namespace refactor_unittests
 
             Product test = layer.GetProductByID(Guid.Parse("8f2e9176-35ee-4f0a-ae55-83023d2db1a3"));
 
+            Assert.AreEqual("Samsung Galaxy S7", test.Name);
             Assert.AreEqual("Newest mobile product from Samsung.", test.Description);
+            Assert.AreEqual(decimal.Parse("1024.99"), test.Price);
+            Assert.AreEqual(decimal.Parse("16.99"), test.DeliveryPrice);
         }
 
         [TestMethod]
@@ -37,8 +40,11 @@ namespace refactor_unittests
             List<Product> results = layer.GetProductByName("Samsung");
 
             Assert.IsTrue(results.Count == 1);
-
+            
+            Assert.AreEqual("Samsung Galaxy S7", results[0].Name);
             Assert.AreEqual("Newest mobile product from Samsung.", results[0].Description);
+            Assert.AreEqual(decimal.Parse("1024.99"), results[0].Price);
+            Assert.AreEqual(decimal.Parse("16.99"), results[0].DeliveryPrice);
         }
 
         [TestMethod]
